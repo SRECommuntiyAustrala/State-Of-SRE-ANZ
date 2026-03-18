@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>State of SRE ANZ — Salary &amp; Sentiment Survey 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c0f;
+    --bg2: #111318;
+    --bg3: #181c23;
+    --border: rgba(255,255,255,0.07);
+    --border-hi: rgba(255,255,255,0.14);
+    --text: #e8eaf0;
+    --text-muted: #8891a4;
+    --text-dim: #444c5c;
+    --accent: #4fffb0;
+    --accent2: #00d4ff;
+    --accent-dim: rgba(79,255,176,0.12);
+    --accent-dim2: rgba(0,212,255,0.1);
+    --red: #ff6b6b;
+    --amber: #ffbc42;
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* === GRID NOISE === */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(79,255,176,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,255,176,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* === NAV === */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,12,15,0.88);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-logo::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    padding: 7px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* === SECTIONS === */
+  section { position: relative; z-index: 1; }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* === HERO === */
+  .hero {
+    padding: 100px 0 80px;
+    overflow: hidden;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero-eyebrow::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+
+  .hero h1 {
+    font-family: var(--sans);
+    font-size: clamp(42px, 6vw, 76px);
+    font-weight: 300;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 580px;
+    line-height: 1.65;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    padding: 14px 28px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  .btn-primary .arrow { transition: transform 0.2s; }
+  .btn-primary:hover .arrow { transform: translateX(3px); }
+
+  .hero-note {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.02em;
+  }
+
+  /* === STATS BAR === */
+  .stats-bar {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 0;
+  }
+
+  .stats-inner {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .stat-item {
+    padding: 2rem 1.5rem;
+    border-right: 1px solid var(--border);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.5s ease;
+  }
+
+  .stat-item:last-child { border-right: none; }
+  .stat-item.visible { opacity: 1; transform: translateY(0); }
+
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* === HOW IT WORKS === */
+  .how {
+    padding: 100px 0;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::before {
+    content: attr(data-num);
+    color: var(--accent);
+    font-size: 11px;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .step {
+    background: var(--bg2);
+    padding: 2.5rem 2rem;
+    transition: background 0.2s;
+  }
+
+  .step:hover { background: var(--bg3); }
+
+  .step-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .step h3 {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+
+  .step p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  /* === WHAT WE ASK === */
+  .what {
+    padding: 100px 0;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .what-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .what-intro h2 {
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+  }
+
+  .what-intro p {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .what-intro p strong {
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  .field-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .field-group {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .field-group-header {
+    padding: 12px 16px;
+    background: var(--bg3);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .field-group-header .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .dot-green { background: var(--accent); }
+  .dot-blue { background: var(--accent2); }
+  .dot-amber { background: var(--amber); }
+  .dot-red { background: var(--red); }
+
+  .field-list {
+    padding: 10px 16px 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .field-tag {
+    font-size: 12px;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: var(--mono);
+    letter-spacing: 0.02em;
+  }
+
+  /* === FORM === */
+  .survey {
+    padding: 100px 0;
+  }
+
+  .survey-wrap {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .survey-sidebar h2 {
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .survey-sidebar p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .privacy-note {
+    margin-top: 1.5rem;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg2);
+  }
+
+  .privacy-note p {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+
+  .privacy-note p + p { margin-top: 6px; }
+
+  /* === FORM STYLES === */
+  .form-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+  }
+
+  .form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .form-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .form-section-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .form-row.full { grid-template-columns: 1fr; }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    letter-spacing: 0.03em;
+  }
+
+  label .req { color: var(--accent); margin-left: 2px; }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  textarea,
+  select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    padding: 10px 14px;
+    width: 100%;
+    transition: border-color 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238891a4' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: rgba(79,255,176,0.4);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.6;
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: var(--text-dim);
+  }
+
+  /* Rating row */
+  .rating-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .rating-row input[type="radio"] { display: none; }
+
+  .rating-row label {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    transition: all 0.15s;
+    letter-spacing: 0;
+  }
+
+  .rating-row input[type="radio"]:checked + label {
+    background: var(--accent-dim);
+    border-color: rgba(79,255,176,0.4);
+    color: var(--accent);
+  }
+
+  .rating-row label:hover {
+    border-color: var(--border-hi);
+    color: var(--text);
+  }
+
+  /* Checkbox tags */
+  .tag-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag-grid input[type="checkbox"] { display: none; }
+
+  .tag-grid label {
+    font-size: 12px;
+    padding: 5px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    letter-spacing: 0.02em;
+    transition: all 0.15s;
+  }
+
+  .tag-grid input:checked + label {
+    background: var(--accent-dim);
+    border-color: rgba(79,255,176,0.4);
+    color: var(--accent);
+  }
+
+  .tag-grid label:hover {
+    border-color: var(--border-hi);
+    color: var(--text);
+  }
+
+  /* Salary range */
+  .salary-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .salary-options input[type="radio"] { display: none; }
+
+  .salary-options label {
+    padding: 10px;
+    text-align: center;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    transition: all 0.15s;
+    letter-spacing: 0;
+  }
+
+  .salary-options input:checked + label {
+    background: var(--accent-dim);
+    border-color: rgba(79,255,176,0.4);
+    color: var(--accent);
+  }
+
+  .salary-options label:hover {
+    border-color: var(--border-hi);
+    color: var(--text);
+  }
+
+  /* Submit */
+  .form-submit {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-submit {
+    width: 100%;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    padding: 15px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .btn-submit:hover { opacity: 0.85; }
+
+  .form-disclaimer {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: center;
+    letter-spacing: 0.02em;
+    line-height: 1.6;
+  }
+
+  /* === WHAT YOU GET === */
+  .reward {
+    padding: 100px 0;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .reward h2 {
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    margin-bottom: 3rem;
+    max-width: 600px;
+    line-height: 1.15;
+  }
+
+  .reward-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+
+  .reward-card {
+    background: var(--bg);
+    padding: 2rem;
+    transition: background 0.2s;
+  }
+
+  .reward-card:hover { background: var(--bg3); }
+
+  .reward-icon {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .reward-card h3 {
+    font-size: 17px;
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.01em;
+  }
+
+  .reward-card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* Preview teaser */
+  .teaser-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .teaser-card::after {
+    content: 'Contribute to unlock full data';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(10,12,15,0.95) 70%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 1.5rem;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    pointer-events: none;
+  }
+
+  .teaser-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .teaser-stat .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .teaser-stat .value {
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+  }
+
+  .teaser-stat.hi .value { color: var(--accent); }
+  .teaser-stat .value.blur { filter: blur(6px); user-select: none; color: var(--text-muted); }
+
+  .teaser-bar-section { margin-top: 1rem; }
+  .teaser-bar-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .bar-row-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    width: 70px;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 6px;
+    background: var(--bg2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--accent);
+    opacity: 0.3;
+  }
+
+  .bar-val {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    width: 60px;
+    text-align: right;
+    flex-shrink: 0;
+    filter: blur(4px);
+  }
+
+  /* === COMMUNITY === */
+  .community {
+    padding: 100px 0;
+  }
+
+  .community-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .community h2 {
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+  }
+
+  .community p {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .community-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 1.5rem;
+  }
+
+  .community-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--text);
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+
+  .community-link:hover {
+    border-color: var(--border-hi);
+    background: var(--bg3);
+  }
+
+  .community-link .link-icon {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: var(--accent-dim);
+    padding: 4px 8px;
+    border-radius: 5px;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+
+  .community-link .link-arrow {
+    margin-left: auto;
+    color: var(--text-dim);
+    font-size: 16px;
+  }
+
+  .terminal-block {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .terminal-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .terminal-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .td-red { background: #ff5f56; }
+  .td-yellow { background: #ffbd2e; }
+  .td-green { background: #27c93f; }
+
+  .terminal-body {
+    padding: 1.5rem;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 2;
+  }
+
+  .t-prompt { color: var(--accent); }
+  .t-cmd { color: var(--text); }
+  .t-comment { color: var(--text-dim); }
+  .t-output { color: var(--text-muted); }
+  .t-val { color: var(--accent2); }
+
+  /* === FOOTER === */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg2);
+  }
+
+  .footer-logo {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--text-muted); }
+
+  /* === SCROLL ANIMATIONS === */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 900px) {
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    .steps { grid-template-columns: 1fr; }
+    .what-grid { grid-template-columns: 1fr; }
+    .survey-wrap { grid-template-columns: 1fr; }
+    .reward-grid { grid-template-columns: 1fr 1fr; }
+    .community-inner { grid-template-columns: 1fr; }
+    .teaser-stats { grid-template-columns: repeat(2, 1fr); }
+    .salary-options { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+    .container { padding: 0 1.25rem; }
+    .hero { padding: 60px 0 50px; }
+    .stats-inner { grid-template-columns: 1fr 1fr; }
+    .reward-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .salary-options { grid-template-columns: repeat(2, 1fr); }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">SRE Community ANZ</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#survey">Contribute</a></li>
+    <li><a href="#report">Report</a></li>
+    <li><a href="#community">Community</a></li>
+  </ul>
+  <a href="#survey" class="nav-cta">Contribute now</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="about">
+  <div class="container">
+    <div class="hero-eyebrow">State of SRE ANZ — 2026</div>
+    <h1>Know your worth.<br><em>Shape the market.</em></h1>
+    <p class="hero-sub">
+      The first salary and sentiment survey built by the SRE &amp; Platform Engineering community in Australia and New Zealand — for the community. Real data. Anonymous. Open to everyone who contributes.
+    </p>
+    <div class="hero-actions">
+      <a href="#survey" class="btn-primary">
+        Contribute your data <span class="arrow">→</span>
+      </a>
+      <span class="hero-note">// ~5 minutes &nbsp;·&nbsp; data anonymised in report</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <span class="stat-num" data-target="47">0</span>
+        <span class="stat-label">Contributors this period</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-target="4">0</span>
+        <span class="stat-label">Cities represented</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-target="2">0</span>
+        <span class="stat-label">Countries (ANZ)</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-prefix="H1 " data-text="2026">—</span>
+        <span class="stat-label">Current reporting period</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="container">
+    <div class="section-label" data-num="01">How it works</div>
+    <div class="steps fade-up">
+      <div class="step">
+        <div class="step-num">// 01</div>
+        <h3>You contribute</h3>
+        <p>Answer ~15 questions about your role, salary, stack, and sentiment about SRE in Australia. Takes about 5 minutes. Your company name is never shown in the report.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">// 02</div>
+        <h3>Community builds</h3>
+        <p>Every submission makes the dataset more accurate. The more voices, the more useful the breakdown by seniority, location, stack, and industry becomes.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">// 03</div>
+        <h3>You get the report</h3>
+        <p>Contributors get the full State of SRE ANZ report sent directly to them — salary benchmarks, stack premiums, sentiment data, and where the market is heading.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE COLLECT -->
+<section class="what" id="report">
+  <div class="container">
+    <div class="what-grid">
+      <div class="what-intro fade-up">
+        <div class="section-label" data-num="02">What we collect</div>
+        <h2>More than just salary.<br>The full picture.</h2>
+        <p>Most salary surveys stop at a number. This one captures the <strong>qualitative reality</strong> of SRE in ANZ — how valued engineers feel, what's challenging organisations when recruiting, how the community wants to grow.</p>
+        <p>Company names are only visible to survey administrators. The published report contains only aggregated, anonymised data.</p>
+      </div>
+      <div class="field-groups fade-up">
+        <div class="field-group">
+          <div class="field-group-header"><span class="dot dot-green"></span>Compensation</div>
+          <div class="field-list">
+            <span class="field-tag">Base salary (AUD)</span>
+            <span class="field-tag">Day rate</span>
+            <span class="field-tag">Benefits</span>
+            <span class="field-tag">Shares / stock</span>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="field-group-header"><span class="dot dot-blue"></span>Role &amp; context</div>
+          <div class="field-list">
+            <span class="field-tag">Job title</span>
+            <span class="field-tag">Seniority</span>
+            <span class="field-tag">Work arrangement</span>
+            <span class="field-tag">Industry</span>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="field-group-header"><span class="dot dot-amber"></span>Tech stack</div>
+          <div class="field-list">
+            <span class="field-tag">Current technologies</span>
+            <span class="field-tag">Desired technologies</span>
+            <span class="field-tag">SRE maturity (1–5)</span>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="field-group-header"><span class="dot dot-red"></span>Sentiment</div>
+          <div class="field-list">
+            <span class="field-tag">SRE value in org</span>
+            <span class="field-tag">Culture</span>
+            <span class="field-tag">Hiring challenges</span>
+            <span class="field-tag">Job motivators</span>
+            <span class="field-tag">JD accuracy</span>
+            <span class="field-tag">Community views</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SURVEY FORM -->
+<section class="survey" id="survey">
+  <div class="container">
+    <div class="survey-wrap">
+
+      <div class="survey-sidebar fade-up">
+        <div class="section-label" data-num="03">Contribute</div>
+        <h2>Your data.<br>Your report.</h2>
+        <p>Fill in the survey below and you'll receive the full State of SRE ANZ report when it's published at the end of H1 2026.</p>
+        <p>All compensation data appears in the report as anonymised aggregates. Your personal details are never shared.</p>
+        <div class="privacy-note">
+          <p>// Company name visible to admins only</p>
+          <p>// Data anonymised before publication</p>
+          <p>// No tracking, no ads, no third-party data sharing</p>
+          <p>// One submission per person per period</p>
+        </div>
+      </div>
+
+      <div class="form-card fade-up">
+        <form id="sre-form" onsubmit="handleSubmit(event)">
+
+          <!-- 1. IDENTITY -->
+          <div class="form-section">
+            <div class="form-section-title">// Identity</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Email address <span class="req">*</span></label>
+                <input type="email" placeholder="you@company.com" required />
+              </div>
+              <div class="form-group">
+                <label>Current job title <span class="req">*</span></label>
+                <input type="text" placeholder="e.g. Senior SRE" required />
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. ROLE -->
+          <div class="form-section">
+            <div class="form-section-title">// Role &amp; context</div>
+            <div class="form-row" style="margin-bottom:12px;">
+              <div class="form-group">
+                <label>Location <span class="req">*</span></label>
+                <select required>
+                  <option value="">Select city</option>
+                  <option>Sydney</option>
+                  <option>Melbourne</option>
+                  <option>Brisbane</option>
+                  <option>Perth</option>
+                  <option>Adelaide</option>
+                  <option>Auckland</option>
+                  <option>Wellington</option>
+                  <option>Remote – ANZ</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Working situation <span class="req">*</span></label>
+                <div style="display:flex;gap:6px;margin-top:2px;">
+                  <input type="radio" name="work" id="w1" value="remote"><label for="w1" style="font-size:13px;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;flex:1;text-align:center;letter-spacing:0;transition:all 0.15s;">Remote</label>
+                  <input type="radio" name="work" id="w2" value="hybrid"><label for="w2" style="font-size:13px;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;flex:1;text-align:center;letter-spacing:0;transition:all 0.15s;">Hybrid</label>
+                  <input type="radio" name="work" id="w3" value="onsite"><label for="w3" style="font-size:13px;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;flex:1;text-align:center;letter-spacing:0;transition:all 0.15s;">On-site</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-row full" style="margin-bottom:12px;">
+              <div class="form-group">
+                <label>How closely does your role resemble SRE? <span class="req">*</span> <span style="color:var(--text-dim)">(1 = not at all, 5 = by the book)</span></label>
+                <div class="rating-row" style="margin-top:4px;">
+                  <input type="radio" name="sre_resemblance" id="r1" value="1"><label for="r1">1</label>
+                  <input type="radio" name="sre_resemblance" id="r2" value="2"><label for="r2">2</label>
+                  <input type="radio" name="sre_resemblance" id="r3" value="3"><label for="r3">3</label>
+                  <input type="radio" name="sre_resemblance" id="r4" value="4"><label for="r4">4</label>
+                  <input type="radio" name="sre_resemblance" id="r5" value="5"><label for="r5">5</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-row full">
+              <div class="form-group">
+                <label>Is SRE valued in your organisation? <span class="req">*</span> <span style="color:var(--text-dim)">(1 = not at all, 5 = highly valued)</span></label>
+                <div class="rating-row" style="margin-top:4px;">
+                  <input type="radio" name="sre_value" id="v1" value="1"><label for="v1">1</label>
+                  <input type="radio" name="sre_value" id="v2" value="2"><label for="v2">2</label>
+                  <input type="radio" name="sre_value" id="v3" value="3"><label for="v3">3</label>
+                  <input type="radio" name="sre_value" id="v4" value="4"><label for="v4">4</label>
+                  <input type="radio" name="sre_value" id="v5" value="5"><label for="v5">5</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. COMPENSATION -->
+          <div class="form-section">
+            <div class="form-section-title">// Compensation</div>
+            <div class="form-row full" style="margin-bottom:12px;">
+              <div class="form-group">
+                <label>Current base salary (excl. super) <span class="req">*</span></label>
+                <div class="salary-options" style="margin-top:4px;">
+                  <input type="radio" name="salary" id="s1" value="100-120k"><label for="s1">$100–120k</label>
+                  <input type="radio" name="salary" id="s2" value="120-140k"><label for="s2">$120–140k</label>
+                  <input type="radio" name="salary" id="s3" value="140-160k"><label for="s3">$140–160k</label>
+                  <input type="radio" name="salary" id="s4" value="160-180k"><label for="s4">$160–180k</label>
+                  <input type="radio" name="salary" id="s5" value="180-200k"><label for="s5">$180–200k</label>
+                  <input type="radio" name="salary" id="s6" value="200k+"><label for="s6">$200k+</label>
+                  <input type="radio" name="salary" id="s7" value="dayrate"><label for="s7">Day rate</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-row full">
+              <div class="form-group">
+                <label>Current benefits <span class="req">*</span> <span style="color:var(--text-dim)">(health insurance, shares, remote allowance, etc.)</span></label>
+                <input type="text" placeholder="e.g. Health insurance, $2k L&D budget, ESOP" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. STACK -->
+          <div class="form-section">
+            <div class="form-section-title">// Stack</div>
+            <div class="form-row full" style="margin-bottom:12px;">
+              <div class="form-group">
+                <label>Current technologies <span class="req">*</span></label>
+                <div class="tag-grid" style="margin-top:6px;" id="current-tech">
+                  <input type="checkbox" id="t_k8s" value="Kubernetes"><label for="t_k8s">Kubernetes</label>
+                  <input type="checkbox" id="t_tf" value="Terraform"><label for="t_tf">Terraform</label>
+                  <input type="checkbox" id="t_aws" value="AWS"><label for="t_aws">AWS</label>
+                  <input type="checkbox" id="t_gcp" value="GCP"><label for="t_gcp">GCP</label>
+                  <input type="checkbox" id="t_az" value="Azure"><label for="t_az">Azure</label>
+                  <input type="checkbox" id="t_prom" value="Prometheus"><label for="t_prom">Prometheus</label>
+                  <input type="checkbox" id="t_graf" value="Grafana"><label for="t_graf">Grafana</label>
+                  <input type="checkbox" id="t_dd" value="Datadog"><label for="t_dd">Datadog</label>
+                  <input type="checkbox" id="t_otel" value="OpenTelemetry"><label for="t_otel">OpenTelemetry</label>
+                  <input type="checkbox" id="t_argo" value="ArgoCD"><label for="t_argo">ArgoCD</label>
+                  <input type="checkbox" id="t_helm" value="Helm"><label for="t_helm">Helm</label>
+                  <input type="checkbox" id="t_go" value="Go"><label for="t_go">Go</label>
+                  <input type="checkbox" id="t_py" value="Python"><label for="t_py">Python</label>
+                  <input type="checkbox" id="t_pg" value="PagerDuty"><label for="t_pg">PagerDuty</label>
+                  <input type="checkbox" id="t_istio" value="Istio"><label for="t_istio">Istio</label>
+                  <input type="checkbox" id="t_ebpf" value="eBPF/Cilium"><label for="t_ebpf">eBPF / Cilium</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-row full">
+              <div class="form-group">
+                <label>Technologies you'd like to work with <span class="req">*</span></label>
+                <input type="text" placeholder="e.g. eBPF, Rust, Wasm, OpenTelemetry" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. SENTIMENT -->
+          <div class="form-section">
+            <div class="form-section-title">// Sentiment &amp; culture</div>
+
+            <div class="form-row full" style="margin-bottom:12px;">
+              <div class="form-group">
+                <label>What SRE initiatives have you been working on? <span class="req">*</span></label>
+                <textarea placeholder="e.g. SLO programme rollout, chaos engineering, platform migration to Backstage..." required></textarea>
+              </div>
+            </div>
+
+            <div class="form-row full" style="margin-bottom:12px;">
+              <div class="form-group">
+                <label>What is the SRE engineering culture like at your org? <span class="req">*</span></label>
+                <textarea placeholder="e.g. Strong blameless postmortem culture, but SLOs still not widely adopted outside platform team..." required></textarea>
+              </div>
+            </div>
+
+            <div class="form-row full" style="margin-bottom:12px;">
+              <div class="form-group">
+                <label>What challenges do you find when your business recruits for SRE? <span class="req">*</span></label>
+                <textarea placeholder="e.g. Very few candidates with observability depth, JDs often conflate SRE and DevOps..." required></textarea>
+              </div>
+            </div>
+
+            <div class="form-row full" style="margin-bottom:12px;">
+              <div class="form-group">
+                <label>How accurate are SRE job descriptions in the Australian market? Do they match the interview process? <span class="req">*</span></label>
+                <textarea placeholder="e.g. Rarely — most JDs list Kubernetes as a nice-to-have but it's the core skill tested..." required></textarea>
+              </div>
+            </div>
+
+            <div class="form-row full" style="margin-bottom:12px;">
+              <div class="form-group">
+                <label>Your top 3 motivators when assessing a new opportunity <span class="req">*</span></label>
+                <div class="tag-grid" style="margin-top:6px;">
+                  <input type="checkbox" id="m1" value="Salary Package"><label for="m1">Salary package</label>
+                  <input type="checkbox" id="m2" value="Bonus"><label for="m2">Bonus</label>
+                  <input type="checkbox" id="m3" value="Tech Stack"><label for="m3">Tech stack</label>
+                  <input type="checkbox" id="m4" value="Remote"><label for="m4">Remote</label>
+                  <input type="checkbox" id="m5" value="Hybrid"><label for="m5">Hybrid</label>
+                  <input type="checkbox" id="m6" value="Progression"><label for="m6">Progression</label>
+                  <input type="checkbox" id="m7" value="Manager"><label for="m7">Manager quality</label>
+                  <input type="checkbox" id="m8" value="Culture"><label for="m8">Culture</label>
+                  <input type="checkbox" id="m9" value="Other"><label for="m9">Other</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. ORIGIN STORY -->
+          <div class="form-section">
+            <div class="form-section-title">// Your SRE story</div>
+            <div class="form-row full" style="margin-bottom:12px;">
+              <div class="form-group">
+                <label>How did you get into SRE? <span class="req">*</span></label>
+                <textarea placeholder="e.g. Started as a sysadmin, migrated to a dev team during a k8s adoption project..." required></textarea>
+              </div>
+            </div>
+            <div class="form-row full">
+              <div class="form-group">
+                <label>What made you choose or stay in SRE? <span class="req">*</span></label>
+                <textarea placeholder="e.g. The intersection of software eng and ops thinking — I wanted to build things that scale reliably..." required></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. COMMUNITY -->
+          <div class="form-section">
+            <div class="form-section-title">// Community</div>
+            <div class="form-row full" style="margin-bottom:12px;">
+              <div class="form-group">
+                <label>What are your thoughts on the SRE community in Australia? <span class="req">*</span></label>
+                <textarea placeholder="e.g. Growing fast but still fragmented — would benefit from more cross-company sharing of postmortems..." required></textarea>
+              </div>
+            </div>
+            <div class="form-row" style="margin-bottom:12px;">
+              <div class="form-group">
+                <label>Interested in a localised SRE Slack group?</label>
+                <div style="display:flex;gap:8px;margin-top:4px;">
+                  <input type="radio" name="slack" id="slack_yes" value="yes"><label for="slack_yes" style="font-size:13px;padding:10px 20px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;letter-spacing:0;transition:all 0.15s;">Yes</label>
+                  <input type="radio" name="slack" id="slack_no" value="no"><label for="slack_no" style="font-size:13px;padding:10px 20px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;letter-spacing:0;transition:all 0.15s;">No</label>
+                  <input type="radio" name="slack" id="slack_maybe" value="maybe"><label for="slack_maybe" style="font-size:13px;padding:10px 20px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;letter-spacing:0;transition:all 0.15s;">Already in one</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Interested in more meetups and events?</label>
+                <div style="display:flex;gap:8px;margin-top:4px;">
+                  <input type="radio" name="meetups" id="m_yes" value="yes"><label for="m_yes" style="font-size:13px;padding:10px 20px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;letter-spacing:0;transition:all 0.15s;">Yes</label>
+                  <input type="radio" name="meetups" id="m_no" value="no"><label for="m_no" style="font-size:13px;padding:10px 20px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;letter-spacing:0;transition:all 0.15s;">No</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-row full">
+              <div class="form-group">
+                <label>Interested in a thought leadership interview or branding opportunity for the report?</label>
+                <input type="text" placeholder="Name, email and/or phone — leave blank to skip" />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-submit">
+            <button type="submit" class="btn-submit">Submit — get the report →</button>
+            <p class="form-disclaimer">// Your company name is admin-only · all report data is anonymised &amp; aggregated · no passwords via this form</p>
+          </div>
+
+        </form>
+
+        <!-- Success state -->
+        <div id="success-msg" style="display:none;text-align:center;padding:3rem 2rem;">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1rem;">// Submission received</div>
+          <h3 style="font-size:24px;font-weight:300;letter-spacing:-0.02em;margin-bottom:1rem;">Thanks for contributing.</h3>
+          <p style="color:var(--text-muted);font-size:14px;line-height:1.7;">You'll receive the full State of SRE ANZ report at the end of H1 2026. Keep an eye on your inbox.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU GET -->
+<section class="reward">
+  <div class="container">
+    <div class="section-label" data-num="04">What contributors receive</div>
+    <h2 class="fade-up">Give data.<br>Get the full picture.</h2>
+    <div class="reward-grid fade-up">
+      <div class="reward-card">
+        <div class="reward-icon">// 01</div>
+        <h3>Salary benchmarks</h3>
+        <p>Compensation by seniority, location, industry, and company size — broken down for ANZ specifically. Know if you're under market.</p>
+      </div>
+      <div class="reward-card">
+        <div class="reward-icon">// 02</div>
+        <h3>Stack premiums</h3>
+        <p>Does eBPF expertise pay more? Does Datadog experience command a premium over open-source observability stacks? The data will tell.</p>
+      </div>
+      <div class="reward-card">
+        <div class="reward-icon">// 03</div>
+        <h3>Sentiment analysis</h3>
+        <p>How valued do SREs feel across industries? What are the hiring bottlenecks? Where is the community heading? Aggregated, anonymised views.</p>
+      </div>
+    </div>
+
+    <!-- Live data teaser -->
+    <div class="teaser-card fade-up" id="teaser-card">
+
+      <!-- Loading state -->
+      <div id="teaser-loading" style="padding:2rem;text-align:center;">
+        <div style="font-family:var(--mono);font-size:12px;color:var(--text-dim);letter-spacing:0.08em;">// fetching live data...</div>
+      </div>
+
+      <!-- Early / no data state (< 5 responses) -->
+      <div id="teaser-empty" style="display:none;padding:2rem 0;">
+        <div style="font-family:var(--mono);font-size:11px;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;">// H1 2026 — data collection open</div>
+        <p style="font-size:14px;color:var(--text-muted);line-height:1.7;">Not enough responses yet to display aggregated stats. Be one of the first to contribute — the more people submit, the more accurate the picture becomes.</p>
+        <a href="#survey" style="display:inline-block;margin-top:1rem;font-family:var(--mono);font-size:12px;color:var(--accent);text-decoration:none;letter-spacing:0.04em;">→ Contribute now</a>
+      </div>
+
+      <!-- Live data state -->
+      <div id="teaser-data" style="display:none;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--text-dim);letter-spacing:0.08em;text-transform:uppercase;">// Live data — <span id="teaser-n">0</span> contributors</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--text-dim);letter-spacing:0.04em;" id="teaser-updated"></div>
+        </div>
+
+        <!-- Top stats row -->
+        <div class="teaser-stats">
+          <div class="teaser-stat hi">
+            <div class="label">Median salary</div>
+            <div class="value" id="t-median">—</div>
+          </div>
+          <div class="teaser-stat">
+            <div class="label">SRE value score</div>
+            <div class="value blur" id="t-value">—</div>
+          </div>
+          <div class="teaser-stat">
+            <div class="label">Remote / hybrid %</div>
+            <div class="value blur" id="t-remote">—</div>
+          </div>
+          <div class="teaser-stat">
+            <div class="label">SRE resemblance avg</div>
+            <div class="value blur" id="t-resemblance">—</div>
+          </div>
+        </div>
+
+        <!-- Salary by band bars -->
+        <div class="teaser-bar-section" style="margin-top:1.5rem;">
+          <div class="teaser-bar-label">// Salary distribution — contribute to see full breakdown</div>
+          <div id="salary-bars"></div>
+        </div>
+
+        <!-- Work arrangement breakdown -->
+        <div class="teaser-bar-section" style="margin-top:1.25rem;">
+          <div class="teaser-bar-label">// Work arrangement</div>
+          <div id="work-bars"></div>
+        </div>
+
+        <!-- Top motivators -->
+        <div style="margin-top:1.25rem;" id="motivators-section">
+          <div class="teaser-bar-label">// Top motivators</div>
+          <div id="motivator-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section class="community" id="community">
+  <div class="container">
+    <div class="community-inner">
+      <div class="fade-up">
+        <div class="section-label" data-num="05">Community</div>
+        <h2>Built by the community.<br>For the community.</h2>
+        <p>This survey is run by the SRE Community Australia — a practitioner-led group organising meetups, panel discussions, and knowledge sharing across Sydney, Melbourne, Brisbane and beyond.</p>
+        <p>The goal is simple: give ANZ SREs the same quality of market intelligence that engineers in San Francisco take for granted.</p>
+        <div class="community-links">
+          <a href="#" class="community-link">
+            <span class="link-icon">MEETUP</span>
+            SRE Community Australia events
+            <span class="link-arrow">→</span>
+          </a>
+          <a href="#" class="community-link">
+            <span class="link-icon">SLACK</span>
+            Join the ANZ SRE Slack
+            <span class="link-arrow">→</span>
+          </a>
+          <a href="#" class="community-link">
+            <span class="link-icon">LINKEDIN</span>
+            Follow SRE Community ANZ
+            <span class="link-arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="terminal-block fade-up">
+        <div class="terminal-header">
+          <div class="terminal-dot td-red"></div>
+          <div class="terminal-dot td-yellow"></div>
+          <div class="terminal-dot td-green"></div>
+        </div>
+        <div class="terminal-body">
+          <div><span class="t-prompt">$</span> <span class="t-cmd">sre-survey --status</span></div>
+          <div class="t-output">Fetching H1 2026 stats...</div>
+          <div>&nbsp;</div>
+          <div><span class="t-comment"># Current period</span></div>
+          <div>period: <span class="t-val">H1 2026</span></div>
+          <div>closes: <span class="t-val">30 Jun 2026</span></div>
+          <div>contributors: <span class="t-val">47</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-comment"># Coverage</span></div>
+          <div>cities: <span class="t-val">['SYD', 'MEL', 'BNE', 'AKL']</span></div>
+          <div>industries: <span class="t-val">9</span></div>
+          <div>seniority_levels: <span class="t-val">['L3'...'Staff']</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-comment"># You</span></div>
+          <div>status: <span style="color:var(--red)">not contributed</span></div>
+          <div>report_access: <span style="color:var(--red)">locked</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-prompt">$</span> <span class="t-cmd">sre-survey --contribute</span></div>
+          <div><span class="t-output">→ <a href="#survey" style="color:var(--accent);text-decoration:none;">#survey</a></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">SRE Community ANZ — State of SRE 2026</span>
+  <ul class="footer-links">
+    <li><a href="#">Privacy policy</a></li>
+    <li><a href="#">Terms of use</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+  // ============================================================
+  // CONFIGURATION — update these two values to connect live data
+  // ============================================================
+
+  // Option A: Google Sheets published CSV
+  // 1. Open your Google Sheet (linked to the Google Form responses)
+  // 2. File → Share → Publish to web → Sheet1 → CSV → Publish
+  // 3. Paste the URL below
+  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQrCvf_jf36nB41KsjdV8BoxMuurdapjUzUWHeiNZ01Sby77bBe1v5ahuNn2_sc6c3g1icZXz4f5ZUE/pub?gid=397480170&single=true&output=csv';
+  // Google Sheet published CSV — linked to the SRE Community ANZ survey responses
+
+  // Option B: If you move to Supabase later, replace fetchData() below
+  // with a fetch() to your Supabase REST endpoint instead.
+
+  // Minimum responses before showing live stats (avoids showing 1-person data)
+  const MIN_RESPONSES = 5;
+
+  // ============================================================
+  // COLUMN MAPPING — matches Google Form response sheet column order
+  // Col 0 = Timestamp (auto), then questions in form order
+  // Adjust indices here if your sheet has extra/reordered columns
+  // ============================================================
+  const COLS = {
+    timestamp:       0,   // Timestamp (auto-added by Google Forms)
+    email:           1,   // Email address
+    jobTitle:        2,   // Current job title?
+    sreResemblance:  3,   // How closely does your role resemble SRE? (1-5)
+    sreValued:       4,   // Do you feel SRE is valued in your organisation? (1-5)
+    initiatives:     5,   // What SRE Engineering initiatives have you been working on?
+    culture:         6,   // What is the SRE Engineering culture like?
+    hiringChallenge: 7,   // What challenges do you find when recruiting for SRE?
+    howGotIn:        8,   // How did you get into SRE?
+    whyChose:        9,   // What made you interested or choose SRE?
+    salary:          10,  // Current base salary (Excluding Super)
+    workArrangement: 11,  // What is your current working situation?
+    benefits:        12,  // Current benefits
+    currentTech:     13,  // Current technologies you are using?
+    wantedTech:      14,  // What technologies would you like to use?
+    jdAccuracy:      15,  // How accurate/transparent are job descriptions?
+    motivators:      16,  // When assessing a new opportunity, your 3 motivators?
+    communityThoughts: 17,// What are your thoughts on the SRE community in Australia?
+    slackInterest:   18,  // Would you be interested in a localised Slack Group?
+    meetupInterest:  19,  // Would you be interested in more Meetups and events?
+    thoughtLeadership: 20,// Interested in a thought leadership interview?
+  };
+
+  // Salary band values as they appear in the Google Form options
+  // Key must match the form option text exactly
+  const SALARY_MIDPOINTS = {
+    '100 - 120':       110000,
+    '120 - 140':       130000,
+    '140 - 160':       150000,
+    '160 -180':        170000,
+    '180 - 200,000':   190000,
+    '200,000 +':       215000,
+    'Day Rate':        null,
+  };
+
+  // ============================================================
+  // DATA FETCH
+  // ============================================================
+  async function fetchData() {
+    if (!SHEET_CSV_URL) {
+      // No sheet URL configured — use demo data so the UI is visible
+      return getDemoData();
+    }
+    try {
+      const res = await fetch(SHEET_CSV_URL);
+      if (!res.ok) throw new Error('fetch failed');
+      const text = await res.text();
+      return parseCSV(text);
+    } catch (e) {
+      console.warn('Sheet fetch failed, using demo data:', e);
+      return getDemoData();
+    }
+  }
+
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    if (lines.length < 2) return [];
+    // Skip header row (index 0)
+    return lines.slice(1).map(line => {
+      // Handle quoted fields with commas inside
+      const cols = [];
+      let cur = '', inQ = false;
+      for (let i = 0; i < line.length; i++) {
+        const c = line[i];
+        if (c === '"') { inQ = !inQ; }
+        else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+        else { cur += c; }
+      }
+      cols.push(cur.trim());
+      return cols;
+    }).filter(row => row.length > 2 && row[COLS.email]);
+  }
+
+  // Demo data — realistic enough to show the UI working
+  // Remove or replace once SHEET_CSV_URL is set
+  function getDemoData() {
+    const salaryBands = ['100 - 120','120 - 140','140 - 160','160 -180','180 - 200,000','200,000 +','Day Rate'];
+    const works = ['Remote','Hybrid','On-site'];
+    const motivatorPool = ['Salary Package','Tech Stack','Remote','Hybrid','Progression','Culture','Manager','Bonus'];
+    const rows = [];
+    const seed = [
+      ['160 -180','3','4','Remote','Salary Package,Tech Stack,Remote'],
+      ['180 - 200,000','4','4','Hybrid','Tech Stack,Progression,Culture'],
+      ['140 - 160','3','3','Hybrid','Salary Package,Remote,Culture'],
+      ['200,000 +','5','5','Remote','Tech Stack,Remote,Progression'],
+      ['160 -180','4','4','Remote','Tech Stack,Culture,Manager'],
+      ['120 - 140','2','3','On-site','Salary Package,Bonus,Culture'],
+      ['180 - 200,000','4','5','Hybrid','Progression,Tech Stack,Remote'],
+      ['160 -180','3','4','Remote','Salary Package,Tech Stack,Hybrid'],
+      ['140 - 160','3','3','Hybrid','Culture,Manager,Progression'],
+      ['200,000 +','5','5','Remote','Tech Stack,Remote,Progression'],
+      ['180 - 200,000','4','4','Remote','Remote,Tech Stack,Culture'],
+      ['160 -180','4','4','Hybrid','Salary Package,Progression,Culture'],
+    ];
+    seed.forEach((s, i) => {
+      const row = new Array(21).fill('');
+      row[COLS.timestamp] = new Date().toISOString();
+      row[COLS.email] = `user${i}@example.com`;
+      row[COLS.salary] = s[0];
+      row[COLS.sreResemblance] = s[1];
+      row[COLS.sreValued] = s[2];
+      row[COLS.workArrangement] = s[3];
+      row[COLS.motivators] = s[4];
+      rows.push(row);
+    });
+    return rows;
+  }
+
+  // ============================================================
+  // COMPUTE AGGREGATES
+  // ============================================================
+  function computeStats(rows) {
+    const n = rows.length;
+
+    // --- Median salary ---
+    const salaryNums = rows
+      .map(r => SALARY_MIDPOINTS[r[COLS.salary]])
+      .filter(v => v !== null && v !== undefined);
+    salaryNums.sort((a, b) => a - b);
+    const median = salaryNums.length
+      ? salaryNums[Math.floor(salaryNums.length / 2)]
+      : null;
+
+    // --- Salary band distribution ---
+    const bands = {};
+    rows.forEach(r => {
+      const b = r[COLS.salary];
+      if (b) bands[b] = (bands[b] || 0) + 1;
+    });
+
+    // --- Work arrangement ---
+    const work = { Remote: 0, Hybrid: 0, 'On-site': 0 };
+    rows.forEach(r => {
+      const w = r[COLS.workArrangement];
+      if (w && work[w] !== undefined) work[w]++;
+    });
+    const remoteHybridPct = n ? Math.round(((work.Remote + work.Hybrid) / n) * 100) : null;
+
+    // --- SRE resemblance avg ---
+    const resemblanceVals = rows
+      .map(r => parseFloat(r[COLS.sreResemblance]))
+      .filter(v => v >= 1 && v <= 5);
+    const resemblanceAvg = resemblanceVals.length
+      ? (resemblanceVals.reduce((a, b) => a + b, 0) / resemblanceVals.length).toFixed(1)
+      : null;
+
+    // --- SRE value avg ---
+    const valueVals = rows
+      .map(r => parseFloat(r[COLS.sreValued]))
+      .filter(v => v >= 1 && v <= 5);
+    const valueAvg = valueVals.length
+      ? (valueVals.reduce((a, b) => a + b, 0) / valueVals.length).toFixed(1)
+      : null;
+
+    // --- Top motivators ---
+    const motCount = {};
+    rows.forEach(r => {
+      const mots = (r[COLS.motivators] || '').split(',').map(m => m.trim()).filter(Boolean);
+      mots.forEach(m => { motCount[m] = (motCount[m] || 0) + 1; });
+    });
+    const topMotivators = Object.entries(motCount)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([label, count]) => ({ label, count, pct: Math.round((count / n) * 100) }));
+
+    return { n, median, bands, work, remoteHybridPct, resemblanceAvg, valueAvg, topMotivators };
+  }
+
+  // ============================================================
+  // RENDER
+  // ============================================================
+  function fmtSalary(num) {
+    if (!num) return '—';
+    return '$' + Math.round(num / 1000) + 'k';
+  }
+
+  function makeBar(label, count, total, blurred) {
+    const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+    const barWidth = Math.round((count / total) * 100);
+    return `
+      <div class="bar-row">
+        <span class="bar-row-label">${label}</span>
+        <div class="bar-track"><div class="bar-fill" style="width:${barWidth}%"></div></div>
+        <span class="bar-val${blurred ? ' blur' : ''}">${pct}%</span>
+      </div>`;
+  }
+
+  function renderTeaser(stats) {
+    document.getElementById('teaser-loading').style.display = 'none';
+
+    if (stats.n < MIN_RESPONSES) {
+      document.getElementById('teaser-empty').style.display = 'block';
+      return;
+    }
+
+    document.getElementById('teaser-data').style.display = 'block';
+    document.getElementById('teaser-n').textContent = stats.n;
+
+    const now = new Date();
+    document.getElementById('teaser-updated').textContent =
+      `// updated ${now.toLocaleDateString('en-AU', { day:'numeric', month:'short' })}`;
+
+    // Top stats
+    document.getElementById('t-median').textContent = fmtSalary(stats.median);
+    document.getElementById('t-value').textContent = stats.valueAvg ? stats.valueAvg + ' / 5' : '—';
+    document.getElementById('t-remote').textContent = stats.remoteHybridPct !== null ? stats.remoteHybridPct + '%' : '—';
+    document.getElementById('t-resemblance').textContent = stats.resemblanceAvg ? stats.resemblanceAvg + ' / 5' : '—';
+
+    // Salary bands
+    const bandOrder = ['100 - 120','120 - 140','140 - 160','160 -180','180 - 200,000','200,000 +','Day Rate'];
+    const bandLabels = { 'Day Rate': 'Day rate', '200,000 +': '$200k+', '180 - 200,000': '$180–200k',
+      '160 -180': '$160–180k', '140 - 160': '$140–160k', '120 - 140': '$120–140k', '100 - 120': '$100–120k' };
+    const salaryBarsEl = document.getElementById('salary-bars');
+    salaryBarsEl.innerHTML = bandOrder
+      .filter(b => stats.bands[b])
+      .reverse()
+      .map(b => makeBar(bandLabels[b] || b, stats.bands[b], stats.n, true))
+      .join('');
+
+    // Work arrangement
+    const workBarsEl = document.getElementById('work-bars');
+    workBarsEl.innerHTML = Object.entries(stats.work)
+      .filter(([, v]) => v > 0)
+      .sort((a, b) => b[1] - a[1])
+      .map(([label, count]) => makeBar(label, count, stats.n, false))
+      .join('');
+
+    // Motivators
+    const motEl = document.getElementById('motivator-tags');
+    motEl.innerHTML = stats.topMotivators.map((m, i) => `
+      <span style="
+        font-size:12px;padding:4px 12px;border-radius:20px;font-family:var(--mono);
+        letter-spacing:0.03em;
+        background:${i === 0 ? 'var(--accent-dim)' : 'var(--bg3)'};
+        border:1px solid ${i === 0 ? 'rgba(79,255,176,0.3)' : 'var(--border)'};
+        color:${i === 0 ? 'var(--accent)' : 'var(--text-muted)'};
+      ">${m.label} <span style="opacity:0.6">${m.pct}%</span></span>
+    `).join('');
+  }
+
+  // Also update the hero stats bar contributor count from live data
+  function updateHeroCount(n) {
+    const el = document.querySelector('.stat-num[data-target]');
+    if (el) el.dataset.target = n;
+  }
+
+  // ============================================================
+  // BOOT
+  // ============================================================
+  async function boot() {
+    const rows = await fetchData();
+    const stats = computeStats(rows);
+    updateHeroCount(stats.n);
+    renderTeaser(stats);
+  }
+
+  boot();
+
+  // ============================================================
+  // INTERSECTION OBSERVER (fade-up)
+  // ============================================================
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => {
+      if (el.isIntersecting) { el.target.classList.add('visible'); observer.unobserve(el.target); }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // === STAT COUNTER ANIMATION ===
+  const statObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        const items = entry.target.querySelectorAll('.stat-item');
+        items.forEach((item, i) => {
+          setTimeout(() => item.classList.add('visible'), i * 100);
+          const numEl = item.querySelector('.stat-num');
+          if (numEl.dataset.text) { numEl.textContent = (numEl.dataset.prefix || '') + numEl.dataset.text; return; }
+          const target = parseInt(numEl.dataset.target);
+          const prefix = numEl.dataset.prefix || '';
+          let current = 0;
+          const step = Math.ceil(target / 30);
+          const timer = setInterval(() => {
+            current = Math.min(current + step, target);
+            numEl.textContent = prefix + current;
+            if (current >= target) clearInterval(timer);
+          }, 40);
+        });
+        statObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const statsEl = document.querySelector('.stats-inner');
+  if (statsEl) statObserver.observe(statsEl);
+
+  // === RADIO TOGGLE STYLES ===
+  document.querySelectorAll('input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      const siblings = document.querySelectorAll(`input[name="${this.name}"]`);
+      siblings.forEach(s => {
+        const lbl = document.querySelector(`label[for="${s.id}"]`);
+        if (!lbl) return;
+        if (s.checked) {
+          lbl.style.background = 'var(--accent-dim)';
+          lbl.style.borderColor = 'rgba(79,255,176,0.4)';
+          lbl.style.color = 'var(--accent)';
+        } else { lbl.style.background = ''; lbl.style.borderColor = ''; lbl.style.color = ''; }
+      });
+    });
+  });
+
+  // === FORM SUBMIT ===
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('sre-form').style.display = 'none';
+    document.getElementById('success-msg').style.display = 'block';
+    window.scrollTo({ top: document.getElementById('survey').offsetTop - 80, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
