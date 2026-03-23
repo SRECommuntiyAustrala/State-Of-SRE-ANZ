@@ -1677,16 +1677,21 @@
   // ============================================================
   async function fetchData() {
     if (!SHEET_CSV_URL) {
-      // No sheet URL configured — use demo data so the UI is visible
+      console.log('[SRE Survey] No sheet URL configured, using demo data');
       return getDemoData();
     }
     try {
+      console.log('[SRE Survey] Fetching sheet:', SHEET_CSV_URL);
       const res = await fetch(SHEET_CSV_URL);
-      if (!res.ok) throw new Error('fetch failed');
+      console.log('[SRE Survey] Response status:', res.status, res.ok);
+      if (!res.ok) throw new Error('fetch failed with status ' + res.status);
       const text = await res.text();
-      return parseCSV(text);
+      console.log('[SRE Survey] Raw CSV (first 300 chars):', text.substring(0, 300));
+      const rows = parseCSV(text);
+      console.log('[SRE Survey] Parsed rows:', rows.length, rows[0]);
+      return rows;
     } catch (e) {
-      console.warn('Sheet fetch failed, using demo data:', e);
+      console.warn('[SRE Survey] Sheet fetch failed, using demo data:', e.message);
       return getDemoData();
     }
   }
