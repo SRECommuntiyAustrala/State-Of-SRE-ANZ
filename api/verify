@@ -1,0 +1,32 @@
+const SUPABASE_URL = 'https://dihbvaajzudidcebrzia.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpaGJ2YWFqenVkaWRjZWJyemlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyMzA2MTIsImV4cCI6MjA4OTgwNjYxMn0.zPEhr3gCGaqpz0CdvIDgvMo57zjf7WEkUlBydLA0auE';
+
+module.exports = async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const { email } = req.body || {};
+  if (!email) return res.status(400).json({ error: 'Email required' });
+
+  try {
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/contributors?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&select=email`,
+      {
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        }
+      }
+    );
+
+    const data = await response.json();
+    const found = Array.isArray(data) && data.length > 0;
+    return res.status(200).json({ access: found });
+  } catch (e) {
+    return res.status(500).json({ error: 'Verification failed: ' + e.message });
+  }
+};
