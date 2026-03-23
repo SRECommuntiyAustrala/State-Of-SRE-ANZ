@@ -1307,7 +1307,16 @@
         </div>
         <div class="form-group">
           <label>Current benefits</label>
-          <input type="text" id="f-benefits" placeholder="e.g. Health insurance, $2k L&D budget, ESOP" />
+          <div class="tag-grid" style="margin-top:8px;">
+            <input type="checkbox" id="b1" value="Bonus"><label for="b1">Bonus</label>
+            <input type="checkbox" id="b2" value="Stock"><label for="b2">Stock</label>
+            <input type="checkbox" id="b3" value="L&D Budget"><label for="b3">L&D Budget</label>
+            <input type="checkbox" id="b4" value="Office/Machine Budget"><label for="b4">Office / Machine Budget</label>
+            <input type="checkbox" id="b5" value="Work from anywhere"><label for="b5">Work from anywhere</label>
+            <input type="checkbox" id="b6" value="Extra Holiday"><label for="b6">Extra Holiday</label>
+            <input type="checkbox" id="b7" value="Insurance Discount"><label for="b7">Insurance Discount</label>
+            <input type="checkbox" id="b8" value="Other"><label for="b8">Other</label>
+          </div>
         </div>
       </div>
     </div>
@@ -1339,11 +1348,40 @@
             <input type="checkbox" id="t_pg" value="PagerDuty"><label for="t_pg">PagerDuty</label>
             <input type="checkbox" id="t_istio" value="Istio"><label for="t_istio">Istio</label>
             <input type="checkbox" id="t_ebpf" value="eBPF/Cilium"><label for="t_ebpf">eBPF / Cilium</label>
+            <input type="checkbox" id="t_llm" value="LLMs"><label for="t_llm">LLMs</label>
+            <input type="checkbox" id="t_gpu" value="GPUs"><label for="t_gpu">GPUs</label>
+            <input type="checkbox" id="t_otel2" value="OTel"><label for="t_otel2">OTel</label>
+            <input type="checkbox" id="t_ai" value="AI"><label for="t_ai">AI</label>
+            <input type="checkbox" id="t_mlops" value="MLOps"><label for="t_mlops">MLOps</label>
+            <input type="checkbox" id="t_cicd" value="CI/CD"><label for="t_cicd">CI/CD</label>
           </div>
         </div>
         <div class="form-group">
           <label>Technologies you'd like to work with</label>
-          <input type="text" id="f-wantedtech" placeholder="e.g. eBPF, Rust, Wasm, OpenTelemetry" />
+          <div class="tag-grid" style="margin-top:8px;">
+            <input type="checkbox" id="wt_k8s" value="Kubernetes"><label for="wt_k8s">Kubernetes</label>
+            <input type="checkbox" id="wt_tf" value="Terraform"><label for="wt_tf">Terraform</label>
+            <input type="checkbox" id="wt_aws" value="AWS"><label for="wt_aws">AWS</label>
+            <input type="checkbox" id="wt_gcp" value="GCP"><label for="wt_gcp">GCP</label>
+            <input type="checkbox" id="wt_az" value="Azure"><label for="wt_az">Azure</label>
+            <input type="checkbox" id="wt_prom" value="Prometheus"><label for="wt_prom">Prometheus</label>
+            <input type="checkbox" id="wt_graf" value="Grafana"><label for="wt_graf">Grafana</label>
+            <input type="checkbox" id="wt_dd" value="Datadog"><label for="wt_dd">Datadog</label>
+            <input type="checkbox" id="wt_otel" value="OpenTelemetry"><label for="wt_otel">OpenTelemetry</label>
+            <input type="checkbox" id="wt_argo" value="ArgoCD"><label for="wt_argo">ArgoCD</label>
+            <input type="checkbox" id="wt_helm" value="Helm"><label for="wt_helm">Helm</label>
+            <input type="checkbox" id="wt_go" value="Go"><label for="wt_go">Go</label>
+            <input type="checkbox" id="wt_py" value="Python"><label for="wt_py">Python</label>
+            <input type="checkbox" id="wt_pg" value="PagerDuty"><label for="wt_pg">PagerDuty</label>
+            <input type="checkbox" id="wt_istio" value="Istio"><label for="wt_istio">Istio</label>
+            <input type="checkbox" id="wt_ebpf" value="eBPF/Cilium"><label for="wt_ebpf">eBPF / Cilium</label>
+            <input type="checkbox" id="wt_llm" value="LLMs"><label for="wt_llm">LLMs</label>
+            <input type="checkbox" id="wt_gpu" value="GPUs"><label for="wt_gpu">GPUs</label>
+            <input type="checkbox" id="wt_otel2" value="OTel"><label for="wt_otel2">OTel</label>
+            <input type="checkbox" id="wt_ai" value="AI"><label for="wt_ai">AI</label>
+            <input type="checkbox" id="wt_mlops" value="MLOps"><label for="wt_mlops">MLOps</label>
+            <input type="checkbox" id="wt_cicd" value="CI/CD"><label for="wt_cicd">CI/CD</label>
+          </div>
         </div>
       </div>
     </div>
@@ -1358,7 +1396,16 @@
       <div style="display:grid;gap:20px;">
         <div class="form-group">
           <label>What SRE initiatives have you been working on? <span class="req">*</span></label>
-          <textarea id="f-initiatives" placeholder="e.g. SLO programme rollout, chaos engineering, platform migration to Backstage..."></textarea>
+          <div class="tag-grid" style="margin-top:8px;">
+            <input type="checkbox" id="i1" value="Chaos Engineering"><label for="i1">Chaos Engineering</label>
+            <input type="checkbox" id="i2" value="Reducing Toil"><label for="i2">Reducing Toil</label>
+            <input type="checkbox" id="i3" value="Observability"><label for="i3">Observability</label>
+            <input type="checkbox" id="i4" value="OpenTelemetry"><label for="i4">OpenTelemetry</label>
+            <input type="checkbox" id="i5" value="Other"><label for="i5">Other</label>
+          </div>
+          <div id="initiatives-other-wrap" style="margin-top:10px;display:none;">
+            <input type="text" id="f-initiatives-other" placeholder="Please list your other initiatives..." />
+          </div>
         </div>
         <div class="form-group">
           <label>What is the SRE engineering culture like at your org? <span class="req">*</span></label>
@@ -1378,7 +1425,43 @@
         </div>
         <div class="form-group">
           <label>How accurate are SRE job descriptions in Australia? <span class="req">*</span></label>
-          <textarea id="f-jdaccuracy" placeholder="e.g. Rarely match reality. Most JDs list Kubernetes as a nice-to-have but it's the core skill tested..."></textarea>
+          <div style="margin-top:10px;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">
+            <div style="text-align:center;">
+              <input type="radio" name="jd_accuracy" id="jd1" value="1" style="display:none;">
+              <label for="jd1" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all 0.15s;">
+                <span style="font-family:var(--mono);font-size:18px;font-weight:500;">1</span>
+                <span style="font-size:11px;color:var(--text-dim);font-family:var(--mono);letter-spacing:0.02em;line-height:1.4;text-align:center;">Not accurate at all</span>
+              </label>
+            </div>
+            <div style="text-align:center;">
+              <input type="radio" name="jd_accuracy" id="jd2" value="2" style="display:none;">
+              <label for="jd2" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all 0.15s;">
+                <span style="font-family:var(--mono);font-size:18px;font-weight:500;">2</span>
+                <span style="font-size:11px;color:var(--text-dim);font-family:var(--mono);line-height:1.4;">&nbsp;</span>
+              </label>
+            </div>
+            <div style="text-align:center;">
+              <input type="radio" name="jd_accuracy" id="jd3" value="3" style="display:none;">
+              <label for="jd3" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all 0.15s;">
+                <span style="font-family:var(--mono);font-size:18px;font-weight:500;">3</span>
+                <span style="font-size:11px;color:var(--text-dim);font-family:var(--mono);letter-spacing:0.02em;line-height:1.4;text-align:center;">Somewhere in the middle</span>
+              </label>
+            </div>
+            <div style="text-align:center;">
+              <input type="radio" name="jd_accuracy" id="jd4" value="4" style="display:none;">
+              <label for="jd4" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all 0.15s;">
+                <span style="font-family:var(--mono);font-size:18px;font-weight:500;">4</span>
+                <span style="font-size:11px;color:var(--text-dim);font-family:var(--mono);line-height:1.4;">&nbsp;</span>
+              </label>
+            </div>
+            <div style="text-align:center;">
+              <input type="radio" name="jd_accuracy" id="jd5" value="5" style="display:none;">
+              <label for="jd5" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all 0.15s;">
+                <span style="font-family:var(--mono);font-size:18px;font-weight:500;">5</span>
+                <span style="font-size:11px;color:var(--text-dim);font-family:var(--mono);letter-spacing:0.02em;line-height:1.4;text-align:center;">Google standard</span>
+              </label>
+            </div>
+          </div>
         </div>
         <div class="form-group">
           <label>Top motivators when assessing a new opportunity <span class="req">*</span></label>
@@ -2041,13 +2124,17 @@
       if (techs.length === 0) { alert('Please select at least one current technology.'); return false; }
     }
     if (n === 5) {
-      const required = ['f-initiatives','f-culture','f-hiring','f-howgotin','f-whychose','f-jdaccuracy'];
+      const required = ['f-culture','f-hiring','f-howgotin','f-whychose'];
       for (const id of required) {
         if (!document.getElementById(id).value.trim()) {
           alert('Please fill in all required fields on this step.'); return false;
         }
       }
-      const motivators = document.querySelectorAll('#step-5 input[type="checkbox"]:checked');
+      const initiatives = document.querySelectorAll('#step-5 input[type="checkbox"][id^="i"]:checked');
+      if (initiatives.length === 0) { alert('Please select at least one SRE initiative.'); return false; }
+      const jdAccuracy = document.querySelector('input[name="jd_accuracy"]:checked');
+      if (!jdAccuracy) { alert('Please rate the accuracy of SRE job descriptions.'); return false; }
+      const motivators = document.querySelectorAll('#step-5 input[type="checkbox"][id^="m"]:checked');
       if (motivators.length === 0) { alert('Please select at least one motivator.'); return false; }
     }
     if (n === 6) {
@@ -2092,7 +2179,29 @@
     document.getElementById('survey-takeover').scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Keyboard: Enter advances, Escape closes
+  // Show/hide initiatives "Other" text box
+  document.getElementById('i5').addEventListener('change', function() {
+    document.getElementById('initiatives-other-wrap').style.display = this.checked ? 'block' : 'none';
+  });
+
+  // JD accuracy radio styling
+  document.querySelectorAll('input[name="jd_accuracy"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      document.querySelectorAll('input[name="jd_accuracy"]').forEach(r => {
+        const lbl = document.querySelector(`label[for="${r.id}"]`);
+        if (!lbl) return;
+        if (r.checked) {
+          lbl.style.background = 'var(--accent-dim)';
+          lbl.style.borderColor = 'rgba(79,255,176,0.4)';
+          lbl.querySelectorAll('span').forEach(s => s.style.color = 'var(--accent)');
+        } else {
+          lbl.style.background = 'var(--bg)';
+          lbl.style.borderColor = 'var(--border)';
+          lbl.querySelectorAll('span').forEach(s => s.style.color = '');
+        }
+      });
+    });
+  });
   document.addEventListener('keydown', function(e) {
     const takeover = document.getElementById('survey-takeover');
     if (takeover.style.display !== 'block') return;
