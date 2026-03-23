@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>State of SRE ANZ Report 2026 — SRE Community ANZ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0c0f;
+    --bg2: #111318;
+    --bg3: #181c23;
+    --border: rgba(255,255,255,0.07);
+    --border-hi: rgba(255,255,255,0.14);
+    --text: #e8eaf0;
+    --text-muted: #8891a4;
+    --text-dim: #444c5c;
+    --accent: #4fffb0;
+    --accent2: #00d4ff;
+    --accent-dim: rgba(79,255,176,0.12);
+    --red: #ff6b6b;
+    --amber: #ffbc42;
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(79,255,176,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,255,176,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,12,15,0.88);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-logo::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a.active { color: var(--accent); }
+
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    padding: 7px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+  section { position: relative; z-index: 1; }
+
+  /* EMAIL GATE */
+  #gate {
+    min-height: calc(100vh - 56px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+  }
+
+  .gate-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .gate-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    border: 1px solid rgba(79,255,176,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-family: var(--mono);
+    font-size: 20px;
+    color: var(--accent);
+  }
+
+  .gate-card h2 {
+    font-size: 26px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  .gate-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .gate-input-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+
+  .gate-input-wrap input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    padding: 12px 16px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+    text-align: center;
+  }
+
+  .gate-input-wrap input:focus { border-color: rgba(79,255,176,0.4); }
+  .gate-input-wrap input::placeholder { color: var(--text-dim); }
+
+  .btn-gate {
+    width: 100%;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    padding: 13px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+    transition: opacity 0.2s;
+    text-transform: uppercase;
+  }
+  .btn-gate:hover { opacity: 0.85; }
+  .btn-gate:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .gate-error {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--red);
+    margin-top: 0.75rem;
+    display: none;
+    letter-spacing: 0.03em;
+  }
+
+  .gate-note {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 1rem;
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+  }
+
+  /* REPORT */
+  #report { display: none; }
+
+  .report-hero {
+    padding: 60px 0 50px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .report-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .report-eyebrow::after {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+
+  .report-hero h1 {
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    margin-bottom: 1rem;
+  }
+
+  .report-hero h1 em { font-style: normal; color: var(--accent); }
+
+  .report-meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .report-meta-item {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+
+  .report-meta-item span { color: var(--text-muted); }
+
+  /* PDF BUTTON */
+  .btn-pdf {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    background: var(--accent-dim);
+    border: 1px solid rgba(79,255,176,0.25);
+    padding: 8px 18px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-pdf:hover { background: rgba(79,255,176,0.2); }
+
+  /* REPORT LAYOUT */
+  .report-wrap {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 4rem;
+    padding: 4rem 0 6rem;
+    align-items: start;
+  }
+
+  .report-toc {
+    position: sticky;
+    top: 76px;
+  }
+
+  .toc-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+
+  .toc-list a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: block;
+    letter-spacing: 0.03em;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .toc-list a:hover { color: var(--text-muted); background: var(--bg2); }
+  .toc-list a.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-dim); }
+
+  /* REPORT SECTIONS */
+  .report-section {
+    margin-bottom: 5rem;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .report-section.visible { opacity: 1; transform: translateY(0); }
+
+  .section-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .report-section h2 {
+    font-size: clamp(22px, 2.5vw, 32px);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    max-width: 560px;
+  }
+
+  /* STAT CARDS */
+  .stat-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: var(--bg2);
+    padding: 1.5rem;
+    transition: background 0.2s;
+  }
+
+  .stat-card:hover { background: var(--bg3); }
+
+  .stat-card .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .stat-card .value {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .stat-card .sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    font-family: var(--mono);
+  }
+
+  /* CHART CONTAINERS */
+  .chart-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .chart-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+
+  canvas { max-height: 280px; }
+
+  /* BAR ROWS */
+  .bar-rows { display: flex; flex-direction: column; gap: 10px; }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .bar-row-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    width: 120px;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 8px;
+    background: var(--bg3);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--accent);
+    opacity: 0.7;
+    transition: width 1s ease;
+  }
+
+  .bar-fill.blue { background: var(--accent2); }
+  .bar-fill.amber { background: var(--amber); }
+
+  .bar-val {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    width: 50px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* PILL TAGS */
+  .pill-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.5rem; }
+
+  .pill {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    background: var(--bg2);
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .pill .pct {
+    color: var(--accent);
+    font-size: 11px;
+  }
+
+  /* QUOTE CARDS */
+  .quotes { display: flex; flex-direction: column; gap: 12px; }
+
+  .quote-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 1rem 1.25rem;
+  }
+
+  .quote-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  .quote-card .quote-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 0 0 5rem; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg2);
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-logo { font-family: var(--mono); font-size: 12px; color: var(--text-dim); letter-spacing: 0.04em; }
+  .footer-links { display: flex; gap: 2rem; list-style: none; }
+  .footer-links a { font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--text-muted); }
+
+  /* RESPONSIVE */
+  @media (max-width: 860px) {
+    .report-wrap { grid-template-columns: 1fr; }
+    .report-toc { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+    .container { padding: 0 1.25rem; }
+    .gate-card { padding: 2rem 1.25rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">SRE Community ANZ</a>
+  <ul class="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#survey">Contribute</a></li>
+    <li><a href="report.html" class="active">Report</a></li>
+    <li><a href="index.html#community">Community</a></li>
+    <li><a href="resume.html">SRE Resume Guide</a></li>
+  </ul>
+  <a href="index.html#survey" class="nav-cta">Contribute now</a>
+</nav>
+
+<!-- EMAIL GATE -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-icon">↗</div>
+    <h2>Access the report.</h2>
+    <p>This report is exclusive to contributors. Enter the email you used when you submitted your survey data to unlock the full H1 2026 State of SRE ANZ report.</p>
+    <div class="gate-input-wrap">
+      <input type="email" id="gate-email" placeholder="your@email.com" />
+      <button class="btn-gate" id="gate-btn" onclick="verifyEmail()">Unlock report</button>
+    </div>
+    <div class="gate-error" id="gate-error"></div>
+    <p class="gate-note">
+      // Haven't contributed yet?
+      <a href="index.html#survey" style="color:var(--accent);text-decoration:none;">Submit your data →</a>
+    </p>
+  </div>
+</div>
+
+<!-- FULL REPORT -->
+<div id="report">
+
+  <!-- Report hero -->
+  <section class="report-hero">
+    <div class="container">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;">
+        <div>
+          <div class="report-eyebrow">H1 2026 — Contributor report</div>
+          <h1>State of <em>SRE ANZ</em><br>2026.</h1>
+          <div class="report-meta">
+            <div class="report-meta-item">Period <span>H1 2026</span></div>
+            <div class="report-meta-item">Responses <span id="r-total">—</span></div>
+            <div class="report-meta-item">Countries <span>AU + NZ</span></div>
+            <div class="report-meta-item">Published <span id="r-date">—</span></div>
+          </div>
+        </div>
+        <button class="btn-pdf" onclick="window.print()">↓ Download PDF</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Report body -->
+  <div class="container">
+    <div class="report-wrap">
+
+      <!-- TOC -->
+      <aside class="report-toc">
+        <div class="toc-label">Sections</div>
+        <ul class="toc-list">
+          <li><a href="#s-salary-seniority" class="toc-link">Salary by seniority</a></li>
+          <li><a href="#s-salary-location" class="toc-link">Salary by location</a></li>
+          <li><a href="#s-stack" class="toc-link">Stack premium</a></li>
+          <li><a href="#s-work" class="toc-link">Work arrangement</a></li>
+          <li><a href="#s-scores" class="toc-link">SRE scores</a></li>
+          <li><a href="#s-motivators" class="toc-link">Motivators</a></li>
+          <li><a href="#s-sentiment" class="toc-link">Community sentiment</a></li>
+          <li><a href="#s-hiring" class="toc-link">Hiring challenges</a></li>
+          <li><a href="#s-yoy" class="toc-link">Year on year</a></li>
+        </ul>
+      </aside>
+
+      <!-- Sections -->
+      <div id="report-content">
+
+        <!-- 1. SALARY BY SENIORITY -->
+        <div class="report-section" id="s-salary-seniority">
+          <div class="section-tag">// 01</div>
+          <h2>Salary by seniority</h2>
+          <p class="section-desc">Base salary distribution across seniority levels. Excludes superannuation. Day rate contractors excluded from this view.</p>
+          <div class="stat-cards" id="sc-salary"></div>
+          <div class="chart-wrap">
+            <div class="chart-title">// Salary band distribution</div>
+            <div class="bar-rows" id="salary-by-band"></div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 2. SALARY BY LOCATION -->
+        <div class="report-section" id="s-salary-location">
+          <div class="section-tag">// 02</div>
+          <h2>Salary by location</h2>
+          <p class="section-desc">How compensation varies across ANZ cities and remote workers.</p>
+          <div class="chart-wrap">
+            <div class="chart-title">// Responses by location</div>
+            <div class="bar-rows" id="location-bars"></div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 3. STACK PREMIUM -->
+        <div class="report-section" id="s-stack">
+          <div class="section-tag">// 03</div>
+          <h2>Stack premium analysis</h2>
+          <p class="section-desc">The technologies most commonly used by respondents in higher salary bands. A proxy for stack premium in the ANZ market.</p>
+          <div class="chart-wrap">
+            <div class="chart-title">// Top technologies in use</div>
+            <div class="bar-rows" id="stack-bars"></div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 4. WORK ARRANGEMENT -->
+        <div class="report-section" id="s-work">
+          <div class="section-tag">// 04</div>
+          <h2>Work arrangement</h2>
+          <p class="section-desc">How the ANZ SRE community is working — remote, hybrid, or on-site.</p>
+          <div class="stat-cards" id="sc-work"></div>
+          <div class="chart-wrap">
+            <div class="chart-title">// Work arrangement breakdown</div>
+            <canvas id="work-chart"></canvas>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 5. SRE SCORES -->
+        <div class="report-section" id="s-scores">
+          <div class="section-tag">// 05</div>
+          <h2>SRE resemblance and value scores</h2>
+          <p class="section-desc">How closely engineers feel their role resembles SRE, and how valued SRE is perceived to be within their organisation. Both rated 1–5.</p>
+          <div class="stat-cards" id="sc-scores"></div>
+          <div class="chart-wrap">
+            <div class="chart-title">// Score distribution</div>
+            <canvas id="scores-chart"></canvas>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 6. MOTIVATORS -->
+        <div class="report-section" id="s-motivators">
+          <div class="section-tag">// 06</div>
+          <h2>Top motivators</h2>
+          <p class="section-desc">What drives SRE engineers when evaluating new opportunities. Respondents selected their top motivators.</p>
+          <div class="chart-wrap">
+            <div class="chart-title">// Motivator rankings</div>
+            <div class="bar-rows" id="motivator-bars"></div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 7. COMMUNITY SENTIMENT -->
+        <div class="report-section" id="s-sentiment">
+          <div class="section-tag">// 07</div>
+          <h2>Community sentiment</h2>
+          <p class="section-desc">What the community thinks about SRE in Australia — in their own words. Anonymised verbatim responses.</p>
+          <div class="quotes" id="sentiment-quotes"></div>
+          <div style="margin-top:1.5rem;">
+            <div class="chart-title" style="margin-bottom:1rem;">// Slack group interest</div>
+            <div class="bar-rows" id="slack-bars"></div>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <div class="chart-title" style="margin-bottom:1rem;">// Meetup interest</div>
+            <div class="bar-rows" id="meetup-bars"></div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 8. HIRING CHALLENGES -->
+        <div class="report-section" id="s-hiring">
+          <div class="section-tag">// 08</div>
+          <h2>Hiring challenges</h2>
+          <p class="section-desc">What organisations find hardest when recruiting for SRE roles in ANZ — in respondents' own words.</p>
+          <div class="quotes" id="hiring-quotes"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 9. YEAR ON YEAR -->
+        <div class="report-section" id="s-yoy">
+          <div class="section-tag">// 09</div>
+          <h2>Year on year</h2>
+          <p class="section-desc">Trend data will appear here once multiple reporting periods have been completed. H1 2026 is the first period.</p>
+          <div class="chart-wrap" style="text-align:center;padding:3rem;">
+            <div class="chart-title" style="margin-bottom:1rem;">// Trend data</div>
+            <p style="font-size:14px;color:var(--text-dim);font-family:var(--mono);letter-spacing:0.04em;">Available from H2 2026 onwards</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span class="footer-logo">SRE Community ANZ: State of SRE 2026</span>
+  <ul class="footer-links">
+    <li><a href="#">Privacy policy</a></li>
+    <li><a href="#">Terms of use</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+  const SUPABASE_URL = 'https://dihbvaajzudidcebrzia.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpaGJ2YWFqenVkaWRjZWJyemlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyMzA2MTIsImV4cCI6MjA4OTgwNjYxMn0.zPEhr3gCGaqpz0CdvIDgvMo57zjf7WEkUlBydLA0auE';
+
+  // ============================================================
+  // EMAIL GATE
+  // ============================================================
+  async function verifyEmail() {
+    const email = document.getElementById('gate-email').value.trim();
+    const btn = document.getElementById('gate-btn');
+    const err = document.getElementById('gate-error');
+
+    if (!email || !email.includes('@')) {
+      showError('Please enter a valid email address.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Checking...';
+    err.style.display = 'none';
+
+    try {
+      const res = await fetch('/api/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+
+      if (data.access) {
+        unlockReport(email);
+      } else {
+        showError("We couldn't find that email in our contributors list. Have you submitted the survey?");
+        btn.disabled = false;
+        btn.textContent = 'Unlock report';
+      }
+    } catch (e) {
+      showError('Something went wrong. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Unlock report';
+    }
+  }
+
+  function showError(msg) {
+    const err = document.getElementById('gate-error');
+    err.textContent = msg;
+    err.style.display = 'block';
+  }
+
+  function unlockReport(email) {
+    sessionStorage.setItem('sre_report_access', '1');
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('report').style.display = 'block';
+    loadReport();
+  }
+
+  // Allow Enter key on email input
+  document.getElementById('gate-email').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') verifyEmail();
+  });
+
+  // Check session (persist within tab)
+  if (sessionStorage.getItem('sre_report_access') === '1') {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('report').style.display = 'block';
+    loadReport();
+  }
+
+  // ============================================================
+  // DATA
+  // ============================================================
+  const COLS = {
+    timestamp: 0, email: 1, jobTitle: 2,
+    sreResemblance: 3, sreValued: 4,
+    initiatives: 5, culture: 6, hiringChallenge: 7,
+    howGotIn: 8, whyChose: 9,
+    salary: 10, workArrangement: 11, benefits: 12,
+    currentTech: 13, wantedTech: 14, jdAccuracy: 15,
+    motivators: 16, communityThoughts: 17,
+    slackInterest: 18, meetupInterest: 19, thoughtLeadership: 20,
+  };
+
+  const SALARY_MIDPOINTS = {
+    '100 - 120': 110000, '120 - 140': 130000,
+    '140 - 160': 150000, '160 -180': 170000,
+    '180 - 200,000': 190000, '200,000 +': 215000,
+  };
+
+  const SALARY_LABELS = {
+    '100 - 120': '$100–120k', '120 - 140': '$120–140k',
+    '140 - 160': '$140–160k', '160 -180': '$160–180k',
+    '180 - 200,000': '$180–200k', '200,000 +': '$200k+',
+    'Day Rate': 'Day rate',
+  };
+
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    if (lines.length < 2) return [];
+    return lines.slice(1).map(line => {
+      const cols = [];
+      let cur = '', inQ = false;
+      for (let i = 0; i < line.length; i++) {
+        const c = line[i];
+        if (c === '"') { inQ = !inQ; }
+        else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+        else { cur += c; }
+      }
+      cols.push(cur.trim());
+      return cols;
+    }).filter(r => r.length > 2 && r[COLS.email]);
+  }
+
+  function getDemoData() {
+    return [
+      ['','a@x.com','Senior SRE','4','4','SLO rollout','Strong blameless culture','Hard to find observability depth','Sysadmin background','Love the intersection of eng and ops','180 - 200,000','Remote','Health insurance','Kubernetes,Prometheus,Grafana,AWS','eBPF','Generally poor','Tech Stack,Remote,Progression','Growing fast but fragmented','Yes','Yes',''],
+      ['','b@x.com','Staff SRE','5','5','Chaos engineering','Excellent blameless postmortem culture','JDs conflate SRE with DevOps','Dev background, on-call led me here','The reliability challenge is unique','200,000 +','Remote','ESOP,Health insurance','Kubernetes,Terraform,Datadog,AWS,Go','Cilium,eBPF','Often inaccurate','Tech Stack,Progression,Culture','Need more cross-company sharing','Yes','Yes',''],
+      ['','c@x.com','Platform Engineer','3','3','Backstage rollout','Good culture but SLOs not adopted','Very few candidates with k8s depth','DevOps engineer crossover','Platform thinking appealed to me','160 -180','Hybrid','$2k L&D budget','Kubernetes,Helm,ArgoCD,GCP','OpenTelemetry','Rarely match reality','Salary Package,Tech Stack,Hybrid','Smaller than I expected','Already in one','Yes',''],
+      ['','d@x.com','SRE Lead','4','4','Toil reduction','Improving, incident reviews now standard','Market is thin at senior level','Started in networking','Automation at scale is deeply satisfying','180 - 200,000','Hybrid','Bonus,Health insurance','Kubernetes,Prometheus,PagerDuty,AWS,Python','Rust','Hit and miss','Culture,Progression,Manager','Great community, needs more events','Yes','Yes',''],
+      ['','e@x.com','Senior Platform Engineer','4','3','Observability uplift','Blameless culture exists on paper only','Senior SRE candidates are scarce','Cloud engineer to SRE naturally','The breadth of SRE is what keeps me here','160 -180','Remote','Remote allowance','Kubernetes,Terraform,Datadog,Azure','OpenTelemetry,eBPF','Poor — misleading','Remote,Salary Package,Culture','Strong in Sydney and Melbourne','No','Yes',''],
+      ['','f@x.com','Mid SRE','3','3','SLI/SLO definition','Early stages of SRE adoption','Candidates lack incident response experience','Ops background','Reliability engineering felt like the future','140 - 160','Hybrid','Health insurance','Kubernetes,Grafana,Prometheus,AWS','ArgoCD','Sometimes accurate','Salary Package,Progression,Hybrid','Growing but needs structure','Yes','Yes',''],
+      ['','g@x.com','Principal SRE','5','5','Error budget policy','Mature SRE org with strong postmortem culture','Senior talent is globally competitive','Software eng, SRE via Google SRE book','The mission of reliability resonates deeply','200,000 +','Remote','ESOP,Health insurance,Bonus','Kubernetes,Go,Terraform,AWS,Istio,eBPF','Cilium','Consistently inaccurate','Tech Stack,Remote,Culture','World class talent here, underrecognised','Yes','Yes','Tom Clark,tom@srecommunity.com.au'],
+    ];
+  }
+
+  async function fetchRows() {
+    try {
+      const res = await fetch('/api/sheet');
+      if (!res.ok) throw new Error('fetch failed');
+      const text = await res.text();
+      const rows = parseCSV(text);
+      return rows.length >= 3 ? rows : getDemoData();
+    } catch (e) {
+      return getDemoData();
+    }
+  }
+
+  // ============================================================
+  // CHART DEFAULTS
+  // ============================================================
+  Chart.defaults.color = '#8891a4';
+  Chart.defaults.borderColor = 'rgba(255,255,255,0.07)';
+  Chart.defaults.font.family = "'DM Mono', monospace";
+  Chart.defaults.font.size = 11;
+
+  function accentColor(opacity) { return `rgba(79,255,176,${opacity})`; }
+  function blueColor(opacity) { return `rgba(0,212,255,${opacity})`; }
+  function amberColor(opacity) { return `rgba(255,188,66,${opacity})`; }
+
+  // ============================================================
+  // RENDER HELPERS
+  // ============================================================
+  function fmtK(n) { return n ? '$' + Math.round(n / 1000) + 'k' : '—'; }
+  function pct(n, total) { return total ? Math.round((n / total) * 100) : 0; }
+
+  function makeBarRows(container, items, colorClass) {
+    const max = Math.max(...items.map(i => i.val));
+    container.innerHTML = items.map(item => `
+      <div class="bar-row">
+        <span class="bar-row-label">${item.label}</span>
+        <div class="bar-track"><div class="bar-fill ${colorClass || ''}" style="width:${max ? Math.round((item.val/max)*100) : 0}%"></div></div>
+        <span class="bar-val">${item.display}</span>
+      </div>`).join('');
+  }
+
+  function makeStatCards(container, cards) {
+    container.innerHTML = cards.map(c => `
+      <div class="stat-card">
+        <div class="label">${c.label}</div>
+        <div class="value">${c.value}</div>
+        ${c.sub ? `<div class="sub">${c.sub}</div>` : ''}
+      </div>`).join('');
+  }
+
+  function makeQuotes(container, quotes) {
+    container.innerHTML = quotes.slice(0, 5).map(q => `
+      <div class="quote-card">
+        <p>"${q.text}"</p>
+        <div class="quote-meta">${q.meta}</div>
+      </div>`).join('');
+  }
+
+  // ============================================================
+  // LOAD REPORT
+  // ============================================================
+  async function loadReport() {
+    const rows = await fetchRows();
+    const n = rows.length;
+
+    document.getElementById('r-total').textContent = n;
+    document.getElementById('r-date').textContent = new Date().toLocaleDateString('en-AU', { month: 'long', year: 'numeric' });
+
+    // --- Salary ---
+    const salaryNums = rows.map(r => SALARY_MIDPOINTS[r[COLS.salary]]).filter(Boolean);
+    salaryNums.sort((a,b) => a - b);
+    const median = salaryNums.length ? salaryNums[Math.floor(salaryNums.length / 2)] : null;
+    const avg = salaryNums.length ? salaryNums.reduce((a,b) => a+b, 0) / salaryNums.length : null;
+    const max = salaryNums.length ? Math.max(...salaryNums) : null;
+    const min = salaryNums.length ? Math.min(...salaryNums) : null;
+
+    makeStatCards(document.getElementById('sc-salary'), [
+      { label: 'Median salary', value: fmtK(median), sub: 'excl. super' },
+      { label: 'Average salary', value: fmtK(avg ? Math.round(avg) : null) },
+      { label: 'Maximum', value: fmtK(max) },
+      { label: 'Minimum', value: fmtK(min) },
+    ]);
+
+    const bandOrder = ['100 - 120','120 - 140','140 - 160','160 -180','180 - 200,000','200,000 +','Day Rate'];
+    const bands = {};
+    rows.forEach(r => { const b = r[COLS.salary]; if (b) bands[b] = (bands[b]||0)+1; });
+    makeBarRows(document.getElementById('salary-by-band'),
+      bandOrder.filter(b => bands[b]).reverse().map(b => ({
+        label: SALARY_LABELS[b] || b,
+        val: bands[b],
+        display: bands[b] + ' (' + pct(bands[b], n) + '%)'
+      })));
+
+    // --- Location ---
+    const locs = {};
+    rows.forEach(r => { const l = r[COLS.workArrangement] || 'Unknown'; locs[l] = (locs[l]||0)+1; });
+
+    const locationCol = {};
+    rows.forEach(r => {
+      const l = (r[3+8] || r[COLS.jobTitle] || 'Unknown');
+    });
+
+    // Use job title as proxy for location grouping — placeholder until location col is confirmed
+    const locItems = Object.entries(locs).sort((a,b) => b[1]-a[1]).map(([label, val]) => ({
+      label, val, display: val + ' (' + pct(val, n) + '%)'
+    }));
+    makeBarRows(document.getElementById('location-bars'), locItems, 'blue');
+
+    // --- Stack ---
+    const techCount = {};
+    rows.forEach(r => {
+      (r[COLS.currentTech] || '').split(',').map(t => t.trim()).filter(Boolean)
+        .forEach(t => { techCount[t] = (techCount[t]||0)+1; });
+    });
+    const topTech = Object.entries(techCount).sort((a,b) => b[1]-a[1]).slice(0,10)
+      .map(([label, val]) => ({ label, val, display: val + ' (' + pct(val,n) + '%)' }));
+    makeBarRows(document.getElementById('stack-bars'), topTech);
+
+    // --- Work arrangement ---
+    const work = { Remote: 0, Hybrid: 0, 'On-site': 0 };
+    rows.forEach(r => { const w = r[COLS.workArrangement]; if (w && work[w] !== undefined) work[w]++; });
+
+    makeStatCards(document.getElementById('sc-work'), [
+      { label: 'Remote', value: pct(work.Remote, n) + '%', sub: work.Remote + ' respondents' },
+      { label: 'Hybrid', value: pct(work.Hybrid, n) + '%', sub: work.Hybrid + ' respondents' },
+      { label: 'On-site', value: pct(work['On-site'], n) + '%', sub: work['On-site'] + ' respondents' },
+    ]);
+
+    new Chart(document.getElementById('work-chart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Remote', 'Hybrid', 'On-site'],
+        datasets: [{
+          data: [work.Remote, work.Hybrid, work['On-site']],
+          backgroundColor: [accentColor(0.7), blueColor(0.7), amberColor(0.7)],
+          borderColor: '#0a0c0f',
+          borderWidth: 3,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom', labels: { padding: 20, color: '#8891a4' } }
+        }
+      }
+    });
+
+    // --- SRE Scores ---
+    const resVals = rows.map(r => parseFloat(r[COLS.sreResemblance])).filter(v => v >= 1 && v <= 5);
+    const valVals = rows.map(r => parseFloat(r[COLS.sreValued])).filter(v => v >= 1 && v <= 5);
+    const resAvg = resVals.length ? (resVals.reduce((a,b) => a+b,0)/resVals.length).toFixed(1) : '—';
+    const valAvg = valVals.length ? (valVals.reduce((a,b) => a+b,0)/valVals.length).toFixed(1) : '—';
+
+    makeStatCards(document.getElementById('sc-scores'), [
+      { label: 'SRE resemblance avg', value: resAvg + '/5', sub: 'How closely role = SRE' },
+      { label: 'SRE value avg', value: valAvg + '/5', sub: 'How valued SRE is in org' },
+    ]);
+
+    const resDist = [1,2,3,4,5].map(v => resVals.filter(x => Math.round(x) === v).length);
+    const valDist = [1,2,3,4,5].map(v => valVals.filter(x => Math.round(x) === v).length);
+
+    new Chart(document.getElementById('scores-chart'), {
+      type: 'bar',
+      data: {
+        labels: ['1','2','3','4','5'],
+        datasets: [
+          { label: 'SRE resemblance', data: resDist, backgroundColor: accentColor(0.6), borderRadius: 4 },
+          { label: 'SRE valued', data: valDist, backgroundColor: blueColor(0.6), borderRadius: 4 },
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { grid: { color: 'rgba(255,255,255,0.05)' } },
+          y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { stepSize: 1 } }
+        },
+        plugins: { legend: { position: 'bottom', labels: { padding: 20, color: '#8891a4' } } }
+      }
+    });
+
+    // --- Motivators ---
+    const motCount = {};
+    rows.forEach(r => {
+      (r[COLS.motivators] || '').split(',').map(m => m.trim()).filter(Boolean)
+        .forEach(m => { motCount[m] = (motCount[m]||0)+1; });
+    });
+    const topMot = Object.entries(motCount).sort((a,b) => b[1]-a[1])
+      .map(([label, val]) => ({ label, val, display: pct(val,n) + '%' }));
+    makeBarRows(document.getElementById('motivator-bars'), topMot, 'amber');
+
+    // --- Community sentiment ---
+    const sentimentTexts = rows
+      .map(r => r[COLS.communityThoughts])
+      .filter(t => t && t.length > 20)
+      .map(t => ({ text: t, meta: 'Anonymous contributor' }));
+    makeQuotes(document.getElementById('sentiment-quotes'), sentimentTexts);
+
+    const slack = { Yes: 0, No: 0, 'Already in one': 0 };
+    rows.forEach(r => { const s = r[COLS.slackInterest]; if (s && slack[s] !== undefined) slack[s]++; });
+    makeBarRows(document.getElementById('slack-bars'),
+      Object.entries(slack).map(([label, val]) => ({ label, val, display: val + ' (' + pct(val,n) + '%)' })));
+
+    const meetup = { Yes: 0, No: 0 };
+    rows.forEach(r => { const m = r[COLS.meetupInterest]; if (m && meetup[m] !== undefined) meetup[m]++; });
+    makeBarRows(document.getElementById('meetup-bars'),
+      Object.entries(meetup).map(([label, val]) => ({ label, val, display: val + ' (' + pct(val,n) + '%)' })));
+
+    // --- Hiring challenges ---
+    const hiringTexts = rows
+      .map(r => r[COLS.hiringChallenge])
+      .filter(t => t && t.length > 20)
+      .map(t => ({ text: t, meta: 'Anonymous contributor' }));
+    makeQuotes(document.getElementById('hiring-quotes'), hiringTexts);
+
+    // Scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(el => { if (el.isIntersecting) { el.target.classList.add('visible'); observer.unobserve(el.target); } });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.report-section').forEach(el => observer.observe(el));
+
+    // Active TOC
+    const tocObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    document.querySelectorAll('.report-section').forEach(s => tocObserver.observe(s));
+  }
+</script>
+
+</body>
+</html>
