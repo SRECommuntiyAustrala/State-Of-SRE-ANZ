@@ -2144,98 +2144,73 @@
     }
     return true;
   }
-
   function stepNext() {
     if (!validateStep(currentStep)) return;
     if (currentStep === TOTAL_STEPS) {
-     async function submitSurvey() {
-  // Collect all form data
-  const benefits = [...document.querySelectorAll('#step-3 input[type="checkbox"]:checked')].map(c => c.value).join(', ');
-  const currentTech = [...document.querySelectorAll('#step-4 input[id^="t_"]:checked, #step-4 input[id^="t-"]:checked, #step-4 input[id="t_k8s"]:checked')].map(c => c.value);
-  const allCurrentTech = [...document.querySelectorAll('#step-4 .form-group:first-child input[type="checkbox"]:checked')].map(c => c.value).join(', ');
-  const allWantedTech = [...document.querySelectorAll('#step-4 .form-group:last-child input[type="checkbox"]:checked')].map(c => c.value).join(', ');
-  const initiatives = [...document.querySelectorAll('#step-5 input[id^="i"]:checked')].map(c => c.value).join(', ');
-  const motivators = [...document.querySelectorAll('#step-5 input[id^="m"]:checked')].map(c => c.value).join(', ');
-
-  const payload = {
-    email:              document.getElementById('f-email').value.trim(),
-    job_title:          document.getElementById('f-jobtitle').value.trim(),
-    location:           document.getElementById('f-location').value,
-    work_arrangement:   document.querySelector('input[name="work"]:checked')?.value || '',
-    sre_resemblance:    parseInt(document.querySelector('input[name="sre_resemblance"]:checked')?.value) || null,
-    sre_valued:         parseInt(document.querySelector('input[name="sre_value"]:checked')?.value) || null,
-    salary:             document.querySelector('input[name="salary"]:checked')?.value || '',
-    benefits:           benefits,
-    current_tech:       allCurrentTech,
-    wanted_tech:        allWantedTech,
-    initiatives:        initiatives,
-    culture:            document.getElementById('f-culture').value.trim(),
-    hiring_challenges:  document.getElementById('f-hiring').value.trim(),
-    how_got_in:         document.getElementById('f-howgotin').value.trim(),
-    why_chose:          document.getElementById('f-whychose').value.trim(),
-    jd_accuracy:        parseInt(document.querySelector('input[name="jd_accuracy"]:checked')?.value) || null,
-    motivators:         motivators,
-    community_thoughts: document.getElementById('f-community').value.trim(),
-    slack_interest:     document.querySelector('input[name="slack"]:checked')?.value || '',
-    meetup_interest:    document.querySelector('input[name="meetups"]:checked')?.value || '',
-    thought_leadership: document.getElementById('f-thoughtleadership').value.trim(),
-    submitted:          new Date().toISOString(),
-  };
-
-  try {
-    const res = await fetch('https://dihbvaajzudidcebrzia.supabase.co/rest/v1/contributors', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpaGJ2YWFqenVkaWRjZWJyemlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyMzA2MTIsImV4cCI6MjA4OTgwNjYxMn0.zPEhr3gCGaqpz0CdvIDgvMo57zjf7WEkUlBydLA0auE',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpaGJ2YWFqenVkaWRjZWJyemlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyMzA2MTIsImV4cCI6MjA4OTgwNjYxMn0.zPEhr3gCGaqpz0CdvIDgvMo57zjf7WEkUlBydLA0auE',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify(payload)
-    });
-
-    if (!res.ok) {
-      const err = await res.text();
-      console.error('Supabase error:', err);
-      alert('Something went wrong submitting your response. Please try again.');
-      return;
-    }
-  } catch (e) {
-    console.error('Submit failed:', e);
-    alert('Network error — please check your connection and try again.');
-    return;
-  }
-
-  // Show success state
-  document.getElementById('progress-bar').style.width = '100%';
-  document.querySelectorAll('.survey-step').forEach(s => s.style.display = 'none');
-  document.getElementById('step-nav').style.display = 'none';
-  document.getElementById('step-success').style.display = 'block';
-  document.getElementById('step-success').style.opacity = '0';
-  document.getElementById('step-success').style.transform = 'translateY(16px)';
-  requestAnimationFrame(() => {
-    document.getElementById('step-success').style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-    document.getElementById('step-success').style.opacity = '1';
-    document.getElementById('step-success').style.transform = 'translateY(0)';
-  });
-  document.getElementById('step-label').textContent = 'Complete';
-  document.getElementById('survey-takeover').scrollTo({ top: 0, behavior: 'smooth' });
-}
+      submitSurvey();
       return;
     }
     currentStep++;
     showStep(currentStep);
   }
 
-  function stepBack() {
-    if (currentStep > 1) {
-      currentStep--;
-      showStep(currentStep);
-    }
-  }
+  async function submitSurvey() {
+    const benefits = [...document.querySelectorAll('#step-3 input[type="checkbox"]:checked')].map(c => c.value).join(', ');
+    const allCurrentTech = [...document.querySelectorAll('#step-4 .form-group:first-child input[type="checkbox"]:checked')].map(c => c.value).join(', ');
+    const allWantedTech = [...document.querySelectorAll('#step-4 .form-group:last-child input[type="checkbox"]:checked')].map(c => c.value).join(', ');
+    const initiatives = [...document.querySelectorAll('#step-5 input[id^="i"]:checked')].map(c => c.value).join(', ');
+    const motivators = [...document.querySelectorAll('#step-5 input[id^="m"]:checked')].map(c => c.value).join(', ');
 
-  function submitSurvey() {
-    // Complete the progress bar
+    const payload = {
+      email:              document.getElementById('f-email').value.trim(),
+      job_title:          document.getElementById('f-jobtitle').value.trim(),
+      location:           document.getElementById('f-location').value,
+      work_arrangement:   document.querySelector('input[name="work"]:checked')?.value || '',
+      sre_resemblance:    parseInt(document.querySelector('input[name="sre_resemblance"]:checked')?.value) || null,
+      sre_valued:         parseInt(document.querySelector('input[name="sre_value"]:checked')?.value) || null,
+      salary:             document.querySelector('input[name="salary"]:checked')?.value || '',
+      benefits:           benefits,
+      current_tech:       allCurrentTech,
+      wanted_tech:        allWantedTech,
+      initiatives:        initiatives,
+      culture:            document.getElementById('f-culture').value.trim(),
+      hiring_challenges:  document.getElementById('f-hiring').value.trim(),
+      how_got_in:         document.getElementById('f-howgotin').value.trim(),
+      why_chose:          document.getElementById('f-whychose').value.trim(),
+      jd_accuracy:        parseInt(document.querySelector('input[name="jd_accuracy"]:checked')?.value) || null,
+      motivators:         motivators,
+      community_thoughts: document.getElementById('f-community').value.trim(),
+      slack_interest:     document.querySelector('input[name="slack"]:checked')?.value || '',
+      meetup_interest:    document.querySelector('input[name="meetups"]:checked')?.value || '',
+      thought_leadership: document.getElementById('f-thoughtleadership').value.trim(),
+      submitted:          new Date().toISOString(),
+    };
+
+    try {
+      const res = await fetch('https://dihbvaajzudidcebrzia.supabase.co/rest/v1/contributors', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpaGJ2YWFqenVkaWRjZWJyemlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyMzA2MTIsImV4cCI6MjA4OTgwNjYxMn0.zPEhr3gCGaqpz0CdvIDgvMo57zjf7WEkUlBydLA0auE',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpaGJ2YWFqenVkaWRjZWJyemlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyMzA2MTIsImV4cCI6MjA4OTgwNjYxMn0.zPEhr3gCGaqpz0CdvIDgvMo57zjf7WEkUlBydLA0auE',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        console.error('Supabase error:', err);
+        alert('Something went wrong submitting your response. Please try again.');
+        return;
+      }
+    } catch (e) {
+      console.error('Submit failed:', e);
+      alert('Network error — please check your connection and try again.');
+      return;
+    }
+
+    // Show success state
     document.getElementById('progress-bar').style.width = '100%';
     document.querySelectorAll('.survey-step').forEach(s => s.style.display = 'none');
     document.getElementById('step-nav').style.display = 'none';
@@ -2250,30 +2225,6 @@
     document.getElementById('step-label').textContent = 'Complete';
     document.getElementById('survey-takeover').scrollTo({ top: 0, behavior: 'smooth' });
   }
-
-  // Show/hide initiatives "Other" text box
-  document.getElementById('i5').addEventListener('change', function() {
-    document.getElementById('initiatives-other-wrap').style.display = this.checked ? 'block' : 'none';
-  });
-
-  // JD accuracy radio styling
-  document.querySelectorAll('input[name="jd_accuracy"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-      document.querySelectorAll('input[name="jd_accuracy"]').forEach(r => {
-        const lbl = document.querySelector(`label[for="${r.id}"]`);
-        if (!lbl) return;
-        if (r.checked) {
-          lbl.style.background = 'var(--accent-dim)';
-          lbl.style.borderColor = 'rgba(79,255,176,0.4)';
-          lbl.querySelectorAll('span').forEach(s => s.style.color = 'var(--accent)');
-        } else {
-          lbl.style.background = 'var(--bg)';
-          lbl.style.borderColor = 'var(--border)';
-          lbl.querySelectorAll('span').forEach(s => s.style.color = '');
-        }
-      });
-    });
-  });
   document.addEventListener('keydown', function(e) {
     const takeover = document.getElementById('survey-takeover');
     if (takeover.style.display !== 'block') return;
