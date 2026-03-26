@@ -2183,7 +2183,7 @@
       slack_interest:     document.querySelector('input[name="slack"]:checked')?.value || '',
       meetup_interest:    document.querySelector('input[name="meetups"]:checked')?.value || '',
       thought_leadership: document.getElementById('f-thoughtleadership').value.trim(),
-      submitted:          new Date().toISOString(),
+      submitted_at: new Date().toISOString(),
     };
 
     try {
